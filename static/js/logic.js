@@ -9,6 +9,12 @@ var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/
 });
 
 
+var colorRng = [80,60, 40, 20]
+var colorSet = ["#ff0000", 
+    "#ffc100", 
+    "#ffff00", 
+    "#d6ff00", 
+    "#63ff00"]
 // Create the map with our layers
 var map = L.map("map", {
   center: [0, 0],
@@ -40,9 +46,15 @@ for (var i = 0; i < Math.max(quakeInfo.features.length, 100); i++) {
     // Create a new quake object
     var quake = Object.assign({}, quakeInfo.features[i]);
     var quakeCoordinates = quake.geometry.coordinates
+    var col = getColor(quakeCoordinates[2]);
     // Create a new marker with the appropriate icon and coordinates
-    var newMarker = L.circle([quakeCoordinates[0], quakeCoordinates[1]],5*Math.pow(10,quake.properties["mag"]));
+    var newMarker = L.circle([quakeCoordinates[1], quakeCoordinates[0]],
+        {radius : Math.pow(10,quake.properties["mag"]), 
+        color : col});
     // Bind a popup to the marker that will  display on click. This will be rendered as HTML
+    newMarker.bindPopup("Magnitude: " + quake.properties["mag"] 
+    +"<br>Depth: " + quakeCoordinates[2]
+    +"<br>Place: " + quake.properties["place"])
     newMarker.addTo(map);
 }
     // Call the updateLegend function, which will... update the legend!
@@ -53,7 +65,13 @@ for (var i = 0; i < Math.max(quakeInfo.features.length, 100); i++) {
 // Update the legend's innerHTML with the last updated time and quake count
 function updateLegend() {
   document.querySelector(".legend").innerHTML = [
-    "Earth",
-    "Quake"
+    "Earthquakes by Depth and Magnitude <br>",
   ].join("");
+}
+
+function getColor(depth) {
+    for (var i=0; i<colorRng.length; i++){
+        if (depth>=colorRng[i]) {return colorSet[i]} 
+    }
+    return colorSet[colorRng.length]
 }
