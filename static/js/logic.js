@@ -11,7 +11,7 @@ var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/
 
 // Create the map with our layers
 var map = L.map("map", {
-  center: [0, -74.0059],
+  center: [0, 0],
   zoom: 6,
 });
 
@@ -41,9 +41,8 @@ for (var i = 0; i < Math.max(quakeInfo.features.length, 100); i++) {
     var quake = Object.assign({}, quakeInfo.features[i]);
     var quakeCoordinates = quake.geometry.coordinates
     // Create a new marker with the appropriate icon and coordinates
-    var newMarker = L.marker([quakeCoordinates[0], quakeCoordinates[1]]);
+    var newMarker = L.circle([quakeCoordinates[0], quakeCoordinates[1]],5*Math.pow(10,quake.properties["mag"]));
     // Bind a popup to the marker that will  display on click. This will be rendered as HTML
-    newMarker.bindPopup("popup");
     newMarker.addTo(map);
 }
     // Call the updateLegend function, which will... update the legend!
