@@ -49,7 +49,7 @@ for (var i = 0; i < Math.max(quakeInfo.features.length, 100); i++) {
     var col = getColor(quakeCoordinates[2]);
     // Create a new marker with the appropriate icon and coordinates
     var newMarker = L.circle([quakeCoordinates[1], quakeCoordinates[0]],
-        {radius : Math.pow(10,quake.properties["mag"]), 
+        {radius : 2*Math.pow(10,quake.properties["mag"]), 
         color : col});
     // Bind a popup to the marker that will  display on click. This will be rendered as HTML
     newMarker.bindPopup("Magnitude: " + quake.properties["mag"] 
@@ -62,13 +62,14 @@ for (var i = 0; i < Math.max(quakeInfo.features.length, 100); i++) {
 });
 
 
-// Update the legend's innerHTML with the last updated time and quake count
+// Haven't gotten around to the legend, I know thats a big one
 function updateLegend() {
   document.querySelector(".legend").innerHTML = [
     "Earthquakes by Depth and Magnitude <br>",
   ].join("");
 }
 
+// Get the color of for the circle
 function getColor(depth) {
     for (var i=0; i<colorRng.length; i++){
         if (depth>=colorRng[i]) {return colorSet[i]} 
